@@ -19,9 +19,19 @@ def mutable_rlist():
     contents = empty_rlist
 
     def setitem(index, value):
-        "*** YOUR CODE HERE ***"
-
-    def dispatch(message, value=None):
+        nonlocal contents
+        tmp = []
+        i = 0
+        poppin = 0
+        while i <= index:
+            poppin = dispatch('pop')
+            tmp.append(poppin)
+            i +=1
+        dispatch('push',value)
+        tmp = tmp[:-1]
+        for i in range(1,len(tmp)+1):
+            poppin = dispatch('push',tmp[:-i])
+    def dispatch(message, value=None, value1=None):
         nonlocal contents
         if message == 'first':
             return first(contents)
@@ -39,7 +49,8 @@ def mutable_rlist():
             return item
         if message == 'push':
             contents = rlist(value, contents)
-
+        if message == 'setitem':
+            contents = setitem(value, value1)
     return dispatch
 
 def pair(x, y):
@@ -172,9 +183,8 @@ class MissManners(object):
             elif any(word in 'restock' for word in wordlst):
                 self.object.restock(arg[1])
             else:
-                sentence = arg[0].split()
-                sentence.remove('please')
-                return print('Thanks for asking, but I know not'," ".join(sentence),'.')
+                wordlst.remove('please')
+                return print('Thanks for asking, but I know not'," ".join(wordlst),'.')
         else:
             return print('You must learn to say please')
 # Q4.
